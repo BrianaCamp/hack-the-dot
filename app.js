@@ -217,3 +217,31 @@ element.addEventListener("click", function(e) {
   // -> and re-adding the class
   element.classList.add("run-animation");
 }, false);
+
+function animation() {
+    animate();
+
+    var top = parseInt($('#mark').css('top'));
+    var left = parseInt($('#mark').css('left'));
+    var tween = new TWEEN.Tween({x: 0, y: 0})
+            .to({x: 200, y: 200}, 500)
+            .easing(TWEEN.Easing.Elastic.InOut)
+            .onUpdate(function () {
+                var mark = document.getElementById('mark');
+                mark.style.transform = 'translate(' + this.x + 'px, ' + this.y + 'px)';
+
+                var clone = $('#mark').clone().css({
+                    transform: '',
+                    position: 'absolute',
+                    top: (top + this.y) + 'px',
+                    left: (left + this.x) + 'px'
+                }).attr('id', 'mark-' + this.y + '-' + this.x);
+                $('#wrap').append(clone);
+            })
+            .start();
+
+    function animate(time) {
+        requestAnimationFrame(animate);
+        TWEEN.update();
+    }
+});
